@@ -1,0 +1,46 @@
+<section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h2 class="hero-title">Transform Your Future with Online Learning</h2>
+        <p class="hero-subtitle">Access world-class education from anywhere in the world</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" (click)="handleGetStarted()">Get Started</button>
+          <button class="btn-secondary" (click)="handleBrowseCourses()">Browse Courses</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="featured-courses">
+    <div class="container">
+      <h3 class="section-title">Featured Courses</h3>
+      <div class="courses-grid">
+        @for (course of courses(); track course.id) {
+          <div class="course-card">
+            <img [src]="course.image" [alt]="course.title" class="course-image">
+            <div class="course-content">
+              <h4 class="course-title">{{course.title}}</h4>
+              <p class="course-description">{{course.description}}</p>
+              <div class="course-details">
+                <span class="course-price">${{course.price}}</span>
+                <div class="course-rating">
+                  <span class="star">★</span>
+                  <span>{{course.rating}}</span>
+                  <span class="students">({{course.students}} students)</span>
+                </div>
+              </div>
+              <p class="instructor">By {{course.instructor}}</p>
+              <button class="btn-enroll" (click)="enrollCourse(course.id)">
+                Enroll Now
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="no-courses">
+            <p>No courses available at the moment.</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+  
