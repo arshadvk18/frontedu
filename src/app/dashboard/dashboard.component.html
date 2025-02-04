@@ -1,0 +1,210 @@
+<div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="user-profile">
+        <div class="profile-image">
+          <img src="assets/images/profile-placeholder.jpg" alt="Profile">
+        </div>
+        <h3>Welcome back, Student!</h3>
+      </div>
+  
+      <nav class="sidebar-nav">
+        <button 
+          [class.active]="activeTab() === 'overview'"
+          (click)="setActiveTab('overview')"
+        >Overview</button>
+        <button 
+          [class.active]="activeTab() === 'recorded'"
+          (click)="setActiveTab('recorded')"
+        >Recorded Lectures</button>
+        <button 
+          [class.active]="activeTab() === 'live'"
+          (click)="setActiveTab('live')"
+        >Live Sessions</button>
+        <button 
+          [class.active]="activeTab() === 'saved'"
+          (click)="setActiveTab('saved')"
+        >Saved Videos</button>
+        <button 
+          [class.active]="activeTab() === 'notes'"
+          (click)="setActiveTab('notes')"
+        >Lecture Notes</button>
+        <button 
+          [class.active]="activeTab() === 'assignments'"
+          (click)="setActiveTab('assignments')"
+        >Assignments</button>
+      </nav>
+    </aside>
+  
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Overview Tab -->
+      @if (activeTab() === 'overview') {
+        <div class="overview-grid">
+          <div class="overview-card">
+            <h3>Quick Stats</h3>
+            <div class="stats">
+              <div class="stat-item">
+                <span class="stat-value">12</span>
+                <span class="stat-label">Courses</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">85%</span>
+                <span class="stat-label">Attendance</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">8</span>
+                <span class="stat-label">Pending</span>
+              </div>
+            </div>
+          </div>
+  
+          <div class="overview-card">
+            <h3>Upcoming Live Sessions</h3>
+            @for (session of liveSessions(); track session.id) {
+              <div class="upcoming-session">
+                <h4>{{session.title}}</h4>
+                <p>{{session.startTime}}</p>
+                <button class="btn-join" (click)="joinLiveSession(session.id)">Join Session</button>
+              </div>
+            }
+          </div>
+  
+          <div class="overview-card">
+            <h3>Recent Notes</h3>
+            @for (note of notes(); track note.id) {
+              <div class="note-item">
+                <h4>{{note.title}}</h4>
+                <p>{{note.course}}</p>
+                <button class="btn-download" (click)="downloadNotes(note.id)">Download</button>
+              </div>
+            }
+          </div>
+  
+          <div class="overview-card">
+            <h3>Pending Assignments</h3>
+            @for (assignment of assignments(); track assignment.id) {
+              @if (assignment.status === 'pending') {
+                <div class="assignment-item">
+                  <h4>{{assignment.title}}</h4>
+                  <p>Due: {{assignment.dueDate}}</p>
+                  <button class="btn-submit" (click)="submitAssignment(assignment.id)">Submit</button>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+  
+      <!-- Recorded Lectures Tab -->
+      @if (activeTab() === 'recorded') {
+        <div class="lectures-grid">
+          @for (lecture of recordedLectures(); track lecture.id) {
+            <div class="lecture-card">
+              <img [src]="lecture.thumbnail" [alt]="lecture.title">
+              <div class="lecture-content">
+                <h3>{{lecture.title}}</h3>
+                <p>{{lecture.instructor}}</p>
+                <div class="lecture-details">
+                  <span>{{lecture.duration}}</span>
+                  <span>{{lecture.date}}</span>
+                </div>
+                @if (lecture.progress) {
+                  <div class="progress-bar">
+                    <div class="progress" [style.width.%]="lecture.progress"></div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+  
+      <!-- Live Sessions Tab -->
+      @if (activeTab() === 'live') {
+        <div class="live-sessions">
+          @for (session of liveSessions(); track session.id) {
+            <div class="session-card">
+              <div class="session-info">
+                <h3>{{session.title}}</h3>
+                <p>{{session.instructor}}</p>
+                <p>{{session.startTime}}</p>
+                <p>Duration: {{session.duration}}</p>
+              </div>
+              <button 
+                class="btn-join"
+                [class.upcoming]="session.status === 'upcoming'"
+                [class.live]="session.status === 'live'"
+                [disabled]="session.status === 'ended'"
+                (click)="joinLiveSession(session.id)"
+              >
+                {{session.status === 'upcoming' ? 'Set Reminder' : 
+                  session.status === 'live' ? 'Join Now' : 'Ended'}}
+              </button>
+            </div>
+          }
+        </div>
+      }
+  
+      <!-- Saved Videos Tab -->
+      @if (activeTab() === 'saved') {
+        <div class="lectures-grid">
+          @for (video of savedVideos(); track video.id) {
+            <div class="lecture-card">
+              <img [src]="video.thumbnail" [alt]="video.title">
+              <div class="lecture-content">
+                <h3>{{video.title}}</h3>
+                <p>{{video.instructor}}</p>
+                <div class="lecture-details">
+                  <span>{{video.duration}}</span>
+                  <span>Saved on {{video.date}}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+  
+      <!-- Notes Tab -->
+      @if (activeTab() === 'notes') {
+        <div class="notes-grid">
+          @for (note of notes(); track note.id) {
+            <div class="note-card">
+              <h3>{{note.title}}</h3>
+              <p>{{note.course}}</p>
+              <p class="last-modified">Last modified: {{note.lastModified}}</p>
+              <div class="note-actions">
+                <button class="btn-download" (click)="downloadNotes(note.id)">Download</button>
+                <button class="btn-edit">Edit</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+  
+      <!-- Assignments Tab -->
+      @if (activeTab() === 'assignments') {
+        <div class="assignments-list">
+          @for (assignment of assignments(); track assignment.id) {
+            <div class="assignment-card">
+              <div class="assignment-info">
+                <h3>{{assignment.title}}</h3>
+                <p>{{assignment.course}}</p>
+                <p class="due-date">Due: {{assignment.dueDate}}</p>
+              </div>
+              <div class="assignment-status">
+                <span class="status-badge" [class]="assignment.status">
+                  {{assignment.status}}
+                </span>
+                @if (assignment.status === 'pending') {
+                  <button class="btn-submit" (click)="submitAssignment(assignment.id)">
+                    Submit Assignment
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </main>
+  </div>

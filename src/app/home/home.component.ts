@@ -25,30 +25,30 @@ export class HomeComponent {
     {
       id: 1,
       title: 'Web Development Fundamentals',
-      instructor: 'John Smith',
+      instructor: 'Arshad Mahmood',
       description: 'Learn the basics of web development with HTML, CSS, and JavaScript.',
       image: 'assets/images/web-dev.jpg',
-      price: 49.99,
+      price: 89.99,
       rating: 4.8,
       students: 1250
     },
     {
       id: 2,
       title: 'Data Science Essentials',
-      instructor: 'Sarah Johnson',
+      instructor: 'Mohammad Yawar Haq',
       description: 'Master the fundamentals of data science and analysis.',
       image: 'assets/images/data-science.jpg',
       price: 59.99,
-      rating: 4.9,
-      students: 980
+      rating: 1.9,
+      students: 98
     },
     {
       id: 3,
       title: 'Digital Marketing Masterclass',
-      instructor: 'Mike Wilson',
+      instructor: 'Arshad Mahmood',
       description: 'Complete guide to modern digital marketing strategies.',
       image: 'assets/images/marketing.jpg',
-      price: 44.99,
+      price: 94.99,
       rating: 4.7,
       students: 1520
     }
